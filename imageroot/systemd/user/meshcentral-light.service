@@ -10,8 +10,8 @@
 
 [Unit]
 Description=Podman meshcentral-light.service
-Requires=mariadb-app.service meshcentral-light-app.service
-Before=mariadb-app.service meshcentral-light-app.service
+Requires=meshcentral-light-app.service
+Before=meshcentral-light-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
@@ -22,7 +22,7 @@ ExecStartPre=/bin/rm -f %t/meshcentral-light.pid %t/meshcentral-light.pod-id
 ExecStartPre=/usr/bin/podman pod create --infra-conmon-pidfile %t/meshcentral-light.pid \
     --pod-id-file %t/meshcentral-light.pod-id \
     --name meshcentral-light \
-    --publish 127.0.0.1:${TCP_PORT}:80 \
+    --publish 127.0.0.1:${TCP_PORT}:8989 \
     --replace
 ExecStart=/usr/bin/podman pod start --pod-id-file %t/meshcentral-light.pod-id
 ExecStop=/usr/bin/podman pod stop --ignore --pod-id-file %t/meshcentral-light.pod-id -t 10

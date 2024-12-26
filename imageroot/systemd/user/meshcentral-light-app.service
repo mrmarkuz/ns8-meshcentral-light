@@ -6,7 +6,7 @@
 [Unit]
 Description=Podman  meshcentral-light-app.service
 BindsTo=meshcentral-light.service
-After=meshcentral-light.service mariadb-app.service
+After=meshcentral-light.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
@@ -21,16 +21,23 @@ ExecStartPre=-runagent discover-smarthost
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/meshcentral-light-app.pid \
     --cidfile %t/meshcentral-light-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/meshcentral-light.pod-id --replace -d --name  meshcentral-light-app \
-    --volume meshcentral-light-app:/var/www/html/:Z \
-    --volume ./tmp:/tmp:Z \
-    --env=MARIADB_* \
-    --env MARIADB_DB_TYPE=mysql \
-    --env MARIADB_DB_HOST=127.0.0.1 \
-    --env MARIADB_DB_PORT=3306 \
-    --env MARIADB_DB_USER=meshcentral-light \
-    --env MARIADB_DB_PASSWORD=meshcentral-light \
-    --env MARIADB_DB_NAME=meshcentral-light \
-    ${NGINX_IMAGE}
+    --env-file=%S/state/environment \
+    --volume meshcentral-data:/opt/meshcentral/meshcentral-data:Z \
+    --volume meshcentral-files:/opt/meshcentral/meshcentral-files:Z \
+    --volume meshcentral-backups:/opt/meshcentral/meshcentral-backups:Z \
+    --env HOSTNAME=${TRAEFIK_HOST} \
+    --env REVERSE_PROXY=${TRAEFIK_HOST} \
+    --env REVERSE_PROXY_TLS_PORT=443 \
+    --env IFRAME=false \
+    --env ALLOW_NEW_ACCOUNTS=false \
+    --env WEBRTC=false \
+    --env NODE_ENV=production \
+    ${MESHCENTRAL_IMAGE}
+ExecStartPost=/usr/bin/podman exec meshcentral-app sed -i "s/\"cert\": \"meshcentral\"/\"cert\": \"${TRAEFIK_HOST}\"/" meshcentral-data/config.json
+ExecStartPost=/usr/bin/podman exec meshcentral-app sed -i "s/\"port\": 443/\"port\": 8989/" meshcentral-data/config.json
+ExecStartPost=/usr/bin/podman exec meshcentral-app sed -i "s/\"_aliasPort\": 443/\"aliasPort\": 443/" meshcentral-data/config.json
+ExecStartPost=/usr/bin/podman exec meshcentral-app sed -i "s/\"redirPort\": 80/\"redirPort\": 0/" meshcentral-data/config.json
+ExecStartPost=/usr/bin/podman exec meshcentral-app sed -i "s/\"TLSOffload\": false/\"TLSOffload\": \"127.0.0.1\"/" meshcentral-data/config.json
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/meshcentral-light-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP meshcentral-light-app
 SyslogIdentifier=%u

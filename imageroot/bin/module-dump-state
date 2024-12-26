@@ -10,12 +10,3 @@ set -e
 if ! systemctl --user -q is-active meshcentral-light.service; then
     exit 0
 fi
-
-podman exec mariadb-app mysqldump \
-        --databases meshcentral-light \
-        --default-character-set=utf8mb4 \
-        --skip-dump-date \
-        --ignore-table=mysql.event \
-        --single-transaction \
-        --quick \
-        --add-drop-table  > meshcentral-light.sql
