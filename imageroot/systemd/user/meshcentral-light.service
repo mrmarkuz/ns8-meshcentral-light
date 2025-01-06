@@ -21,6 +21,7 @@ TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/meshcentral-light.pid %t/meshcentral-light.pod-id
 ExecStartPre=/usr/bin/podman pod create --infra-conmon-pidfile %t/meshcentral-light.pid \
     --pod-id-file %t/meshcentral-light.pod-id \
+    --network=slirp4netns:allow_host_loopback=true \
     --name meshcentral-light \
     --publish 127.0.0.1:${TCP_PORT}:8989 \
     --replace
