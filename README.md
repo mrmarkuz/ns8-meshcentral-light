@@ -1,8 +1,11 @@
 # ns8-meshcentral-light
 
-This is MeshCentral for NS8 without mongodb so it should also work on older or power-saving CPUs without AVX support.
+[MeshCentral](https://meshcentral.com/) is a full computer management web site. \
+Documentation: https://ylianst.github.io/MeshCentral/meshcentral/
 
-Thanks to transocean who raised an issue in the Community forum: 
+This the Light edition for NS8 without mongodb so it should also work on older or power-saving CPUs without AVX support.
+
+Thanks to transocean who posted the issue in the Community forum. 
 
 ## Install
 
