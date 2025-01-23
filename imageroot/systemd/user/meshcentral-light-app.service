@@ -33,7 +33,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/meshcentral-light-app.pid \
     --env WEBRTC=false \
     --env NODE_ENV=production \
     ${MESHCENTRAL_IMAGE}
-ExecStartPost=/usr/bin/podman exec meshcentral-light-app sed -i "s/\"cert\": \"meshcentral-light\"/\"cert\": \"${TRAEFIK_HOST}\"/" meshcentral-data/config.json
+ExecStartPost=/usr/bin/podman exec meshcentral-light-app sed -i "s/\"cert\": \"meshcentral\"/\"cert\": \"${TRAEFIK_HOST}\"/" meshcentral-data/config.json
 ExecStartPost=/usr/bin/podman exec meshcentral-light-app sed -i "s/\"port\": 443/\"port\": 8989/" meshcentral-data/config.json
 ExecStartPost=/usr/bin/podman exec meshcentral-light-app sed -i "s/\"_aliasPort\": 443/\"aliasPort\": 443/" meshcentral-data/config.json
 ExecStartPost=/usr/bin/podman exec meshcentral-light-app sed -i "s/\"redirPort\": 80/\"redirPort\": 0/" meshcentral-data/config.json
