@@ -9,47 +9,26 @@ Thanks to transocean who posted the issue in the Community forum.
 
 ## Install
 
-Instantiate the module with:
+Install via Software center:
 
-    add-module ghcr.io/nethserver/meshcentral-light:latest 1
+  - Add a Software repository pointing to `https://repo.mrmarkuz.com/ns8/updates/`, check out the [repo webpage](https://repo.mrmarkuz.com) how to do it.
+
+Instantiate the module on CLI with:
+
+    add-module ghcr.io/nethserver/meshcentral:latest 1
 
 The output of the command will return the instance name.
 Output example:
 
-    {"module_id": "meshcentral-light1", "image_name": "meshcentral-light", "image_url": "ghcr.io/nethserver/meshcentral-light:latest"}
+    {"module_id": "meshcentral1", "image_name": "meshcentral", "image_url": "ghcr.io/nethserver/meshcentral:latest"}
 
 ## Configure
 
-Let's assume that the mattermost instance is named `meshcentral-light1`.
+The FQDN needs to be configured in the Web UI app settings. A valid certificate is recommended.
 
-Launch `configure-module`, by setting the following parameters:
-- `host`: a fully qualified domain name for the application
-- `http2https`: enable or disable HTTP to HTTPS redirection (true/false)
-- `lets_encrypt`: enable or disable Let's Encrypt certificate (true/false)
+## First login
 
-
-Example:
-
-```
-api-cli run configure-module --agent module/meshcentral-light1 --data - <<EOF
-{
-  "host": "meshcentral-light.domain.com",
-  "http2https": true,
-  "lets_encrypt": false
-}
-EOF
-```
-
-The above command will:
-- start and configure the meshcentral-light instance
-- configure a virtual host for trafik to access the instance
-
-## Get the configuration
-You can retrieve the configuration with
-
-```
-api-cli run get-configuration --agent module/meshcentral-light1
-```
+At the login page you can create an account. The created user is the admin user. After creating the admin user it's not possible to create another user at the login page.
 
 ## Uninstall
 
