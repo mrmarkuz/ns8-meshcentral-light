@@ -39,7 +39,7 @@ buildah config --entrypoint=/ \
     --label="org.nethserver.authorizations=traefik@node:routeadm" \
     --label="org.nethserver.tcp-ports-demand=1" \
     --label="org.nethserver.rootfull=0" \
-    --label="org.nethserver.images=docker.io/typhonragewind/meshcentral:preloadlibs-1.1.46" \
+    --label="org.nethserver.images=docker.io/typhonragewind/meshcentral:preloadlibs-1.1.48" \
     "${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"
